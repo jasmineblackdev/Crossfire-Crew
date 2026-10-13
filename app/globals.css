@@ -76,3 +76,13 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #e7915e26;outline:no
 .brand:hover .logo{transform:scale(1.03)}
 @media(max-width:720px){.logo{height:44px}}
 @media(max-height:600px) and (orientation:landscape){.in-match .logo{height:32px}}
+.fps-view{display:none;position:absolute;inset:0;cursor:none}
+.canvas-wrap.fps .fps-view{display:block}
+.canvas-wrap.fps canvas.map{position:absolute;top:12px;left:12px;width:24%;min-width:150px;height:auto;aspect-ratio:1440/900;border:1px solid #ffffff33;box-shadow:0 8px 24px #000a;pointer-events:none;z-index:2;opacity:.92}
+.fps-crosshair{position:absolute;left:50%;top:50%;width:20px;height:20px;transform:translate(-50%,-50%);pointer-events:none;z-index:2;border:2px solid #f0f2dcd9;border-radius:50%;box-shadow:0 0 0 1px #0008,inset 0 0 0 1px #0008}.fps-crosshair:after{content:'';position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;background:var(--accent)}
+.hurt{position:absolute;inset:0;pointer-events:none;opacity:0;z-index:1;background:radial-gradient(ellipse at center,transparent 45%,rgba(190,40,30,.85))}
+.fps-hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);pointer-events:none;z-index:2;font:500 11px 'IBM Plex Mono',monospace;letter-spacing:1px;background:#0f1813d9;border:1px solid var(--line);padding:8px 12px;white-space:nowrap}
+.view-row{margin-top:0}
+.arena-bottom .text-button+.text-button{margin-left:18px}
+.arena-bottom>button:first-of-type{margin-left:auto}
+@media(pointer:coarse){.fps-hint{display:none}}

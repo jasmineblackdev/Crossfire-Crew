@@ -86,3 +86,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #e7915e26;outline:no
 .arena-bottom .text-button+.text-button{margin-left:18px}
 .arena-bottom>button:first-of-type{margin-left:auto}
 @media(pointer:coarse){.fps-hint{display:none}}
+.intro{margin-top:24px;padding:52px 40px 44px;border:1px solid var(--line);background:linear-gradient(90deg,#171c19 0%,#171c19f0 32%,#171c1966 62%,#171c19d9 100%),linear-gradient(0deg,#171c19 0%,transparent 35%),url(/cover.jpg) center 74%/cover no-repeat;box-shadow:0 30px 60px -30px #000c}
+.intro .mission-card{border-left-color:#ffffff26}
+@media(max-width:1000px){.intro{padding:40px 24px 34px}}
+@media(max-width:720px){.intro{margin-top:14px;padding:28px 16px 24px;background:linear-gradient(0deg,#171c19 8%,#171c19d9 60%,#171c1999 100%),url(/cover-sm.jpg) 70% 70%/cover no-repeat}}

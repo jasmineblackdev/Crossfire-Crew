@@ -1,6 +1,6 @@
 export type Input = { x:number; y:number; aim:number; fire:boolean };
 export type Player = { id:string; token:string; name:string; team:number; weapon:string; x:number; y:number; aim:number; hp:number; kills:number; deaths:number; respawn:number; shield:number; nextShot:number; seen:number; input:Input; bot?:boolean; ai?:{since:number;strafe:number;flip:number;tx:number;ty:number;next:number;lx:number;ly:number;check:number} };
-export type Room = {code:string; host:string; phase:string; players:Player[]; score:number[]; time:number; end:number; winner:number|null; shots:{x:number;y:number;ex:number;ey:number;team:number;t:number}[]; feed:{text:string;t:number}[];round:number};
+export type Room = {code:string; host:string; phase:string; players:Player[]; score:number[]; time:number; end:number; winner:number|null; shots:{x:number;y:number;ex:number;ey:number;team:number;t:number;by?:string}[]; feed:{text:string;t:number}[];round:number};
 export const W=1440,H=900;
 export const COVER=[{x:220,y:150,w:150,h:80},{x:1070,y:670,w:150,h:80},{x:1070,y:150,w:150,h:80},{x:220,y:670,w:150,h:80},{x:620,y:360,w:200,h:180},{x:470,y:125,w:75,h:180},{x:895,y:595,w:75,h:180},{x:470,y:595,w:75,h:180},{x:895,y:125,w:75,h:180},{x:170,y:370,w:90,h:160},{x:1180,y:370,w:90,h:160}];
 export function blocked(x:number,y:number,r=18){return x<r||y<r||x>W-r||y>H-r||COVER.some(b=>x>b.x-r&&x<b.x+b.w+r&&y>b.y-r&&y<b.y+b.h+r)}
@@ -41,7 +41,7 @@ export function advance(r:Room,now:number){
    if(candidates[0])angle+=Math.atan2(Math.sin(candidates[0].angle-angle),Math.cos(candidates[0].angle-angle))*0.55;
    const dx=Math.cos(angle),dy=Math.sin(angle);let length=wallDistance(p.x,p.y,dx,dy,range),hit:Player|undefined;
    for(const q of r.players){if(q.team===p.team||q.hp<=0||t<q.shield)continue;const vx=q.x-p.x,vy=q.y-p.y,along=vx*dx+vy*dy,across=Math.abs(vx*dy-vy*dx);if(along>0&&along<length&&across<20){length=along;hit=q;}}
-   r.shots.push({x:p.x,y:p.y,ex:p.x+dx*length,ey:p.y+dy*length,team:p.team,t});
+   r.shots.push({x:p.x,y:p.y,ex:p.x+dx*length,ey:p.y+dy*length,team:p.team,t,by:p.id});
    if(hit){hit.hp=Math.max(0,hit.hp-(p.weapon==='smg'?17:29));if(hit.hp===0){p.kills++;hit.deaths++;hit.respawn=t+3000;hit.input.fire=false;r.score[p.team]++;r.feed.unshift({text:p.name+' eliminated '+hit.name,t});r.feed=r.feed.slice(0,4);if(r.score[p.team]>=25)finish(r);}}
   }
  }

@@ -21,7 +21,7 @@ export async function POST(req:Request){
     else if(b.action==='start'){if(r.host!==p.id)throw Error('Only the host can start a match.');if(r.phase==='playing')throw Error('A match is already running.');start(r,now);}
     else if(b.action==='bot'||b.action==='kick'){if(r.host!==p.id)throw Error('Only the host can manage bots.');if(r.phase==='playing')throw Error('Manage bots between matches.');if(b.action==='bot')addBot(r,now);else r.players=r.players.filter(q=>!(q.bot&&q.id===b.bot));}
     else if(b.action==='weapon'){if(r.phase==='playing'&&p.hp>0)throw Error('Change your weapon while respawning.');p.weapon=b.weapon==='smg'?'smg':'rifle';}
-    else if(b.action==='sync'){const n=(v:unknown)=>typeof v==='number'&&Number.isFinite(v)?v:0;p.input={x:Math.max(-1,Math.min(1,n(b.input?.x))),y:Math.max(-1,Math.min(1,n(b.input?.y))),aim:n(b.input?.aim),fire:b.input?.fire===true};}
+    else if(b.action==='sync'){const n=(v:unknown)=>typeof v==='number'&&Number.isFinite(v)?v:0;p.input={x:Math.max(-1,Math.min(1,n(b.input?.x))),y:Math.max(-1,Math.min(1,n(b.input?.y))),aim:n(b.input?.aim),fire:b.input?.fire===true};if(p.input.fire&&p.hp>0&&p.nextShot<=now&&r.phase==='playing')advance(r,now+1);}
     else throw Error('Unknown game action.');
    }
    const result=await db.prepare('UPDATE rooms SET state=?,revision=revision+1,updated=? WHERE code=? AND revision=?').bind(JSON.stringify(r),now,code,row.revision).run();

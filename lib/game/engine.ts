@@ -14,7 +14,7 @@ export function addBot(r:Room,now:number){if(r.players.length>=8)throw Error('Th
 function sees(p:Player,q:{x:number;y:number}){const d=Math.hypot(q.x-p.x,q.y-p.y)||1;return wallDistance(p.x,p.y,(q.x-p.x)/d,(q.y-p.y)/d,d)>=d;}
 // Bots hunt the nearest visible enemy, hold a weapon-appropriate distance and strafe; otherwise they roam toward the enemy.
 function think(r:Room,p:Player,t:number,dt:number){const ai=p.ai||(p.ai={since:0,strafe:1,flip:0,tx:W/2,ty:H/2,next:0,lx:p.x,ly:p.y,check:t});const range=p.weapon==='smg'?440:710;
- const foes=r.players.filter(q=>q.team!==p.team&&q.hp>0).map(q=>({q,d:Math.hypot(q.x-p.x,q.y-p.y)})).sort((a,b)=>a.d-b.d),seen=foes.find(f=>f.d<range+120&&sees(p,f.q));
+ const foes=r.players.filter(q=>q.team!==p.team&&q.hp>0).map(q=>({q,d:Math.hypot(q.x-p.x,q.y-p.y)})).sort((a,b)=>a.d-b.d),seen=foes.find(f=>f.d<range+120&&(ai.since>0||f.d<160||Math.abs(Math.atan2(Math.sin(Math.atan2(f.q.y-p.y,f.q.x-p.x)-p.aim),Math.cos(Math.atan2(f.q.y-p.y,f.q.x-p.x)-p.aim)))<1.2)&&sees(p,f.q));
  if(t>=ai.flip){ai.strafe=-ai.strafe;ai.flip=t+700+Math.random()*1100;}
  if(t-ai.check>1200){if(Math.hypot(p.x-ai.lx,p.y-ai.ly)<25)ai.next=0;ai.lx=p.x;ai.ly=p.y;ai.check=t;}
  let mx=0,my=0,aim=p.aim,fire=false;

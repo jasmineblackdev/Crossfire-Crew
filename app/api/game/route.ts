@@ -17,7 +17,7 @@ export async function POST(req:Request){
     const team=r.players.filter(p=>p.team===0).length>r.players.filter(p=>p.team===1).length?1:0;const p=newPlayer(String(b.name||''),team,b.weapon||'rifle',now);r.players.push(p);id=p.id;token=p.token;
    }else{
     const p=r.players.find(p=>p.id===b.id&&p.token===b.token);if(!p) return Response.json({error:'Your session ended. Please rejoin the room.'},{status:401});p.seen=now;
-    if(b.action==='leave'){r.players=r.players.filter(q=>q.id!==p.id);if(r.host===p.id)r.host=r.players[0]?.id||'';}
+    if(b.action==='leave'){r.players=r.players.filter(q=>q.id!==p.id);if(r.host===p.id)r.host=r.players.find(q=>!q.bot)?.id||'';}
     else if(b.action==='start'){if(r.host!==p.id)throw Error('Only the host can start a match.');if(r.phase==='playing')throw Error('A match is already running.');start(r,now);}
     else if(b.action==='bot'||b.action==='kick'){if(r.host!==p.id)throw Error('Only the host can manage bots.');if(r.phase==='playing')throw Error('Manage bots between matches.');if(b.action==='bot')addBot(r,now);else r.players=r.players.filter(q=>!(q.bot&&q.id===b.bot));}
     else if(b.action==='weapon'){if(r.phase==='playing'&&p.hp>0)throw Error('Change your weapon while respawning.');p.weapon=b.weapon==='smg'?'smg':'rifle';}
